@@ -21,6 +21,11 @@ function Install-ADOPSModule {
         [Parameter(ValueFromPipelineByPropertyName=$true)]
         [ValidateNotNull()]
         [string]
+        $AccessToken,
+
+        [Parameter(ValueFromPipelineByPropertyName=$true)]
+        [ValidateNotNull()]
+        [string]
         ${MinimumVersion},
 
         [Parameter(ValueFromPipelineByPropertyName=$true)]
@@ -68,13 +73,13 @@ function Install-ADOPSModule {
 
     begin
     {
-
         $FeedUrl = Get-ADOFeedURL $Feed
-        $Credential = Get-ADOFeedCredential $FeedUrl
+        $Credential = Get-ADOFeedCredential $FeedUrl $AccessToken
         $RepositoryName = "ADO/$Feed"
 
         $PSBoundParameters.Remove("Account") | Out-Null
         $PSBoundParameters.Remove("Feed") | Out-Null
+        $PSBoundParameters.Remove("AccessToken") | Out-Null
         Register-PSRepository -Name $RepositoryName -SourceLocation $FeedUrl -Credential $Credential -InstallationPolicy Trusted | Out-Null
         $PSBoundParameters['Repository'] = ,$RepositoryName
         $PSBoundParameters['Credential'] = $Credential
