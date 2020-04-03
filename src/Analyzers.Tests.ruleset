@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="Rules for StyleCop.Analyzers" Description="Code analysis rules" ToolsVersion="15.0">
+  <!-- Load the project's default/global rules -->
+  <Include Path=".\Analyzers.ruleset" Action="Default" />
+  <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
+    <!-- MSTest expects public interfaces but there is no need to document all of them with XML comments -->
+    <Rule Id="CS1591" Action="None" />
+    <Rule Id="SA1600" Action="None" />
+  </Rules>
+</RuleSet>

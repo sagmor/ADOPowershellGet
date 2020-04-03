@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.Build.Traversal">
+  <PropertyGroup>
+    <!-- Traversal projects are not handled by VS -->
+    <IncludeInSolutionFile>false</IncludeInSolutionFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Build all projects recursively under the "src" folder -->
+    <ProjectReference Include="src\**\*.*proj" />
+
+    <!-- Auto generate solutions with msbuild /t:slngen -->
+    <PackageReference Include="SlnGen" Version="2.2.30" />
+  </ItemGroup>
+</Project>

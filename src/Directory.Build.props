@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <!-- Repository Config Properties (Change as needed) -->
+  <PropertyGroup>
+    <!--
+      Treat any warning as an error to enforce code quality
+      Customize individual warnings on Analyzers.ruleset file
+    -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <!-- Global Packages -->
+  <ItemGroup>
+    <!-- Automated version generation -->
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.0.50" PrivateAssets="All"/>
+
+    <!-- Code analysis  -->
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" PrivateAssets="All"/>
+  </ItemGroup>
+
+  <!-- Other defaults -->
+  <PropertyGroup>
+    <!-- Use deterministic compiler flag -->
+    <Deterministic>true</Deterministic>
+
+    <!-- Publish the Repository URL to NuSpec -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+
+    <!-- Embed source files that are not tracked by the source control manager to the PDB -->
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+
+    <!-- Include PDB in the built .nupkg -->
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+
+    <!-- Ignore SemVer2 warnings on package generation -->
+    <NoWarn>NU5105</NoWarn>
+
+    <!-- Set RootNamespace based on AssemblyName -->
+    <RootNamespace>$(AssemblyName)</RootNamespace>
+
+    <!-- Set CodeAnalysisRuleSet -->
+    <CodeAnalysisRuleSet>$([MSBuild]::GetPathOfFileAbove(Analyzers.ruleset, $(MSBuildProjectFullPath)))</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet Condition="$(MSBuildProjectName.Contains('Test'))">$([MSBuild]::GetPathOfFileAbove(Analyzers.Tests.ruleset, $(MSBuildProjectFullPath)))</CodeAnalysisRuleSet>
+
+    <!-- Some Filesystem optimizations -->
+    <CreateHardLinksForAdditionalFilesIfPossible>true</CreateHardLinksForAdditionalFilesIfPossible>
+    <CreateHardLinksForCopyAdditionalFilesIfPossible>true</CreateHardLinksForCopyAdditionalFilesIfPossible>
+    <CreateHardLinksForCopyFilesToOutputDirectoryIfPossible>true</CreateHardLinksForCopyFilesToOutputDirectoryIfPossible>
+    <CreateHardLinksForCopyLocalIfPossible>true</CreateHardLinksForCopyLocalIfPossible>
+    <CreateHardLinksForPublishFilesIfPossible>true</CreateHardLinksForPublishFilesIfPossible>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Hide StyleCop.Cache file from Visual Studio explorer -->
+    <None Include="StyleCop.Cache">
+      <Visible>false</Visible>
+      <InProject>false</InProject>
+    </None>
+  </ItemGroup>
+</Project>
