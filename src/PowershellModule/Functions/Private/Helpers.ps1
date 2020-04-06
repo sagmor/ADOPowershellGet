@@ -34,8 +34,14 @@ function Get-ADOFeedCredential {
 
     if ($AccessToken) {
         Write-Verbose "Using provided Access Token"
-        $Username = "AccessToken"
+        $Username "AccessToken"
         $Password = ConvertTo-SecureString $AccessToken -AsPlainText -Force
+
+        # On Azure Pipeline agents the Agent tries to invoke the embeded CredentialProvider causing issues
+        # See: https://github.com/OneGet/oneget/issues/460
+        # This forces CredentialProvider to use the provided AccessToken
+        $env:VSS_NUGET_ACCESSTOKEN = $AccessToken
+        $env:VSS_NUGET_URI_PREFIXES = $FeedUrl -replace "\/$",""
     } else {
         $Verbosity = ""
         if ($VerbosePreference -match "Silent") {
