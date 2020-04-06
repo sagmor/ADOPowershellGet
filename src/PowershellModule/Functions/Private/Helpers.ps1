@@ -33,11 +33,20 @@ function Get-ADOFeedCredential {
     )
 
     if ($AccessToken) {
+        Write-Verbose "Using provided Access Token"
         $Username = "AccessToken"
         $Password = ConvertTo-SecureString $AccessToken -AsPlainText -Force
     }
     else {
-        $RawCredentials = & "$PSScriptRoot\..\..\Assets\CredentialProvider.VSS.exe" -V Silent -U $FeedUrl | ConvertFrom-Json
+        $Verbosity = ""
+        if ($VerbosePreference -match "Silent") {
+            $Verbosity = "Silent"
+        }
+        else {
+            $Verbosity = "Detailed"
+        }
+
+        $RawCredentials = & "$PSScriptRoot\..\..\Assets\CredentialProvider.VSS.exe" -V $Verbosity -U $FeedUrl | ConvertFrom-Json
 
         if ($LASTEXITCODE -ne 0) {
             throw "Failed to fetch credentials for feed"
