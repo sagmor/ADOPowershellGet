@@ -100,6 +100,7 @@ function Install-ADOPSModule {
             $steppablePipeline = $scriptCmd.GetSteppablePipeline()
             $steppablePipeline.Begin($PSCmdlet)
         } catch {
+            Clear-TemporaryRepository -RepositoryName $RepositoryName -AccessToken $AccessToken
             throw
         }
     }
@@ -109,6 +110,7 @@ function Install-ADOPSModule {
         try {
             $steppablePipeline.Process($_)
         } catch {
+            Clear-TemporaryRepository -RepositoryName $RepositoryName -AccessToken $AccessToken
             throw
         }
     }

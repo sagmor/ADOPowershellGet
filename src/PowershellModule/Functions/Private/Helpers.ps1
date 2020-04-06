@@ -23,6 +23,7 @@ function Get-ADOFeedURL {
 #>
 function Get-ADOFeedCredential {
     [CmdletBinding()]
+    [OutputType('System.Management.Automation.PSCredential')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingConvertToSecureStringWithPlainText", "")]
     Param(
         [Parameter(Mandatory=$true)]
@@ -34,7 +35,7 @@ function Get-ADOFeedCredential {
 
     if ($AccessToken) {
         Write-Verbose "Using provided Access Token"
-        $Username "AccessToken"
+        $Username = "AccessToken"
         $Password = ConvertTo-SecureString $AccessToken -AsPlainText -Force
 
         # On Azure Pipeline agents the Agent tries to invoke the embeded CredentialProvider causing issues
@@ -64,4 +65,26 @@ function Get-ADOFeedCredential {
     $Credential = New-Object System.Management.Automation.PSCredential($Username, $Password)
 
     $Credential
+}
+
+<#
+.SYNOPSIS
+    Cleanup system from temporary resources
+#>
+function Clear-TemporaryRepository {
+    [CmdletBinding()]
+    Param(
+        [Parameter()]
+        [string] $RepositoryName,
+        [Parameter()]
+        [string] $AccessToken
+    )
+
+    if ($AccessToken) {
+        Write-Verbose "Cleaning up VSS environment variables"
+        $env:VSS_NUGET_ACCESSTOKEN = ""
+        $env:VSS_NUGET_URI_PREFIXES = ""
+    }
+
+    Unregister-PSRepository -Name $RepositoryName | Out-Null
 }
