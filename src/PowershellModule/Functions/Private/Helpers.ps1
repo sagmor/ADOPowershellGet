@@ -14,7 +14,7 @@ function Get-ADOFeedURL {
     $Account = $Components[0]
     $FeedName = $Components[1]
 
-    "https://$Account.pkgs.visualstudio.com/_packaging/$FeedName/nuget/v2/"
+    "https://pkgs.dev.azure.com/$Account/_packaging/$FeedName/nuget/v2/"
 }
 
 <#
