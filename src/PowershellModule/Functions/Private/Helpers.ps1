@@ -25,10 +25,10 @@ function Get-ADOFeedCredential {
     [CmdletBinding()]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingConvertToSecureStringWithPlainText", "")]
     Param(
-        [Parameter(Mandatory=$true, Position=0)]
+        [Parameter(Mandatory=$true)]
         [string] $FeedUrl,
 
-        [Parameter(Position=1)]
+        [Parameter()]
         [string] $AccessToken
     )
 

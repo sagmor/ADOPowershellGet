@@ -74,7 +74,7 @@ function Install-ADOPSModule {
     begin
     {
         $FeedUrl = Get-ADOFeedURL $Feed
-        $Credential = Get-ADOFeedCredential $FeedUrl $AccessToken
+        $Credential = Get-ADOFeedCredential -FeedUrl $FeedUrl -AccessToken $AccessToken
         $RepositoryName = "ADO/$Feed"
 
         $PSBoundParameters.Remove("Account") | Out-Null
