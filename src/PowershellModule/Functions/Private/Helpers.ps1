@@ -36,13 +36,11 @@ function Get-ADOFeedCredential {
         Write-Verbose "Using provided Access Token"
         $Username = "AccessToken"
         $Password = ConvertTo-SecureString $AccessToken -AsPlainText -Force
-    }
-    else {
+    } else {
         $Verbosity = ""
         if ($VerbosePreference -match "Silent") {
             $Verbosity = "Silent"
-        }
-        else {
+        } else {
             $Verbosity = "Detailed"
         }
 

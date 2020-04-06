@@ -77,10 +77,13 @@ function Install-ADOPSModule {
         $Credential = Get-ADOFeedCredential -FeedUrl $FeedUrl -AccessToken $AccessToken
         $RepositoryName = "ADO/$Feed"
 
+        Write-Verbose "Registering temporary PSRepository $RepositoryName"
+        Register-PSRepository -Name $RepositoryName -SourceLocation $FeedUrl -Credential $Credential -InstallationPolicy Trusted | Out-Null
+
+        # Cleaning up the parameters we will forward to Install-Module
         $PSBoundParameters.Remove("Account") | Out-Null
         $PSBoundParameters.Remove("Feed") | Out-Null
         $PSBoundParameters.Remove("AccessToken") | Out-Null
-        Register-PSRepository -Name $RepositoryName -SourceLocation $FeedUrl -Credential $Credential -InstallationPolicy Trusted | Out-Null
         $PSBoundParameters['Repository'] = ,$RepositoryName
         $PSBoundParameters['Credential'] = $Credential
 
