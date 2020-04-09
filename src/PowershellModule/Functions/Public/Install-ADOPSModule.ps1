@@ -40,7 +40,7 @@ function Install-ADOPSModule {
 
         [ValidateSet('CurrentUser','AllUsers')]
         [string]
-        $Scope = "CurrentUser",
+        ${Scope},
 
         [Parameter(ValueFromPipelineByPropertyName=$true)]
         [ValidateNotNullOrEmpty()]
@@ -79,6 +79,11 @@ function Install-ADOPSModule {
 
         Write-Verbose "Registering temporary PSRepository $RepositoryName"
         Register-PSRepository -Name $RepositoryName -SourceLocation $FeedUrl -Credential $Credential -InstallationPolicy Trusted | Out-Null
+
+        # Install in CurrentUser scope by default
+        if ([string]::IsNullOrEmpty($PSBoundParameters["Scope"])) {
+            $PSBoundParameters["Scope"] = "CurrentUser"
+        }
 
         # Cleaning up the parameters we will forward to Install-Module
         $PSBoundParameters.Remove("Account") | Out-Null
