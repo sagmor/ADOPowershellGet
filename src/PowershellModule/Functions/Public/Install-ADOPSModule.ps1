@@ -10,6 +10,7 @@ function Install-ADOPSModule {
     param(
         [Parameter(Mandatory=$true, Position=0, ValueFromPipelineByPropertyName=$true)]
         [ValidateNotNull()]
+        [ValidatePattern("^(?:\w+\/)+\w+$")]
         [string]
         $Feed,
 
