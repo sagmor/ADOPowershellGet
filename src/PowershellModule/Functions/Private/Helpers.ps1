@@ -1,18 +1,19 @@
 <#
 .SYNOPSIS
-    Build a nuget Feed url from the account/feed info
+    Build a nuget Feed url from the Account/Feed info. Account may consist of just Organization or Organization/Project.
+.PARAMETER feed
+    The feed Account and value. Expected format as "Organization/Feed" or "Organization/Project/Feed".
 #>
 function Get-ADOFeedURL {
     [CmdletBinding()]
     [OutputType('System.String')]
     Param(
-        [Parameter(Mandatory=$true, Position=0)]
+        [Parameter(Mandatory = $true, Position = 0)]
         [string] $Feed
     )
 
-    $Components = $Feed.Split('/')
-    $Account = $Components[0]
-    $FeedName = $Components[1]
+    $Account = $Feed.Substring(0, $Feed.LastIndexOf('/'))
+    $FeedName = $Feed.Substring($Feed.LastIndexOf('/') + 1)
 
     "https://pkgs.dev.azure.com/$Account/_packaging/$FeedName/nuget/v2/"
 }
@@ -26,7 +27,7 @@ function Get-ADOFeedCredential {
     [OutputType('System.Management.Automation.PSCredential')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingConvertToSecureStringWithPlainText", "")]
     Param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string] $FeedUrl,
 
         [Parameter()]
@@ -42,12 +43,14 @@ function Get-ADOFeedCredential {
         # See: https://github.com/OneGet/oneget/issues/460
         # This forces CredentialProvider to use the provided AccessToken
         $env:VSS_NUGET_ACCESSTOKEN = $AccessToken
-        $env:VSS_NUGET_URI_PREFIXES = $FeedUrl -replace "\/$",""
-    } else {
+        $env:VSS_NUGET_URI_PREFIXES = $FeedUrl -replace "\/$", ""
+    }
+    else {
         $Verbosity = ""
         if ($VerbosePreference -match "Silent") {
             $Verbosity = "Silent"
-        } else {
+        }
+        else {
             $Verbosity = "Detailed"
         }
 
